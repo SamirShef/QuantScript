@@ -1,0 +1,14 @@
+H:\MyProjects\QuantScript\bin\Debug\net8.0\QuantScript.exe
+H:\MyProjects\QuantScript\bin\Debug\net8.0\QuantScript.deps.json
+H:\MyProjects\QuantScript\bin\Debug\net8.0\QuantScript.runtimeconfig.json
+H:\MyProjects\QuantScript\bin\Debug\net8.0\QuantScript.dll
+H:\MyProjects\QuantScript\bin\Debug\net8.0\QuantScript.pdb
+H:\MyProjects\QuantScript\obj\Debug\net8.0\QuantScript.GeneratedMSBuildEditorConfig.editorconfig
+H:\MyProjects\QuantScript\obj\Debug\net8.0\QuantScript.AssemblyInfoInputs.cache
+H:\MyProjects\QuantScript\obj\Debug\net8.0\QuantScript.AssemblyInfo.cs
+H:\MyProjects\QuantScript\obj\Debug\net8.0\QuantScript.csproj.CoreCompileInputs.cache
+H:\MyProjects\QuantScript\obj\Debug\net8.0\QuantScript.dll
+H:\MyProjects\QuantScript\obj\Debug\net8.0\refint\QuantScript.dll
+H:\MyProjects\QuantScript\obj\Debug\net8.0\QuantScript.pdb
+H:\MyProjects\QuantScript\obj\Debug\net8.0\QuantScript.genruntimeconfig.cache
+H:\MyProjects\QuantScript\obj\Debug\net8.0\ref\QuantScript.dll
