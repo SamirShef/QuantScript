@@ -10,6 +10,9 @@ public enum TokenType
 
     VAR,
     USING,
+    CLASS,
+    NEW,
+    THIS,
     DOT,
     IF,
     ELSE,

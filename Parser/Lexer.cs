@@ -120,6 +120,15 @@ public class Lexer
         string word = buffer.ToString();
         switch (word)
         {
+            case "class":
+                AddToken(TokenType.CLASS);
+                break;
+            case "new":
+                AddToken(TokenType.NEW);
+                break;
+            case "this":
+                AddToken(TokenType.THIS);
+                break;
             case "var":
                 AddToken(TokenType.VAR);
                 break;

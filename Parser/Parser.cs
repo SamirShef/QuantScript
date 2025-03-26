@@ -37,7 +37,7 @@ public class Parser
         return new UsingDirective(Namespace);
     }
 
-    private Statement Block()
+    private BlockStatement Block()
     {
         BlockStatement block = new BlockStatement();
         Consume(TokenType.LBrace);
@@ -57,6 +57,10 @@ public class Parser
 
     private Statement Statement()
     {
+        if (Match(TokenType.CLASS))
+        {
+            return ClassDeclaration();
+        }
         if (Get(0).GetType() == TokenType.Word && Get(1).GetType() == TokenType.LParen)
         {
             return new FunctionStatement(Function());
@@ -96,7 +100,49 @@ public class Parser
 
         return AssignmentStatement();
     }
+
+    private Statement ClassDeclaration()
+    {
+        string name = Consume(TokenType.Word).GetValue();
+        BlockStatement body = Block();
+        return new ClassDeclaration(name, body);
+    }
+
+    private Statement ClassMember()
+    {
+        if (Match(TokenType.VAR))
+        {
+            string name = Consume(TokenType.Word).GetValue();
+            Expression initializer = Match(TokenType.EQ) ? Expression() : null;
+            return new FieldDeclaration(name, initializer);
+        }
+        else if (Match(TokenType.VOID))
+        {
+            return MethodDeclaration(isVoid: true);
+        }
+        else if (Get(0).GetType() == TokenType.Word && Get(1).GetType() == TokenType.LParen)
+        {
+            return MethodDeclaration(isVoid: false);
+        }
+        throw new Exception($"Invalid class member: {Get(0).GetValue()}");
+    }
     
+    private Statement MethodDeclaration(bool isVoid)
+    {
+        string name = Consume(TokenType.Word).GetValue();
+        Consume(TokenType.LParen);
+        
+        List<string> parameters = new List<string>();
+        while (!Match(TokenType.RParen))
+        {
+            parameters.Add(Consume(TokenType.Word).GetValue());
+            Match(TokenType.COMMA);
+        }
+        
+        Statement body = StatementORBlock();
+        return new MethodDeclaration(name, parameters, body, isVoid);
+    }
+
     private Statement AssignmentStatement()
     {
         if (Get(0).GetType() == TokenType.Word && Get(1).GetType() == TokenType.EQ)
@@ -365,6 +411,10 @@ public class Parser
     private Expression Primary()
     {
         Token current = Get(0);
+        if (Match(TokenType.NEW))
+        {
+            return NewExpression();
+        }
         if (Match(TokenType.Number))
         {
             return new ValueExpression(Convert.ToDouble(current.GetValue().Replace(".", ",")));
@@ -385,6 +435,14 @@ public class Parser
             return result;
         }
         throw new Exception($"Unknown expression {current.GetType()}");
+    }
+
+    private Expression NewExpression()
+    {
+        string className = Consume(TokenType.Word).GetValue();
+        Consume(TokenType.LParen); // Ожидаем скобки (можно сделать опциональными)
+        Consume(TokenType.RParen);
+        return new ObjectCreationExpression(className);
     }
 
     private Token Consume(TokenType type)

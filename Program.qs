@@ -1,6 +1,5 @@
-void Sum (a, b) return a + b
+class Calculator {
+    var memory = 5
+}
 
-var num = 10
-var sum = Sum(num, 5)
-echo(sum)
-echo(Sum(2, 3))
+var calc = new Calculator()
