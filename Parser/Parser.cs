@@ -101,10 +101,21 @@ public class Parser
         return AssignmentStatement();
     }
 
+    private BlockStatement ClassBlock()
+    {
+        BlockStatement block = new BlockStatement();
+        Consume(TokenType.LBrace);
+        while (!Match(TokenType.RBrace))
+        {
+            block.Add(ClassMember()); // Обрабатываем только члены класса
+        }
+        return block;
+    }
+
     private Statement ClassDeclaration()
     {
         string name = Consume(TokenType.Word).GetValue();
-        BlockStatement body = Block();
+        BlockStatement body = ClassBlock(); // Используем новый метод
         return new ClassDeclaration(name, body);
     }
 
@@ -113,7 +124,9 @@ public class Parser
         if (Match(TokenType.VAR))
         {
             string name = Consume(TokenType.Word).GetValue();
-            Expression initializer = Match(TokenType.EQ) ? Expression() : null;
+            Expression initializer = null;
+            if (Match(TokenType.EQ)) initializer = Expression();
+            else throw new Exception("The value of the field has not been declared");
             return new FieldDeclaration(name, initializer);
         }
         else if (Match(TokenType.VOID))
@@ -409,6 +422,19 @@ public class Parser
     }
 
     private Expression Primary()
+    {
+        Expression expr = PrimaryBase();
+        
+        while (Match(TokenType.DOT))
+        {
+            string memberName = Consume(TokenType.Word).GetValue();
+            expr = new MemberAccessExpression(expr, memberName);
+        }
+        
+        return expr;
+    }
+
+    private Expression PrimaryBase()
     {
         Token current = Get(0);
         if (Match(TokenType.NEW))

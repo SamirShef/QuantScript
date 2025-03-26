@@ -3,3 +3,4 @@ class Calculator {
 }
 
 var calc = new Calculator()
+echo(calc.memory)

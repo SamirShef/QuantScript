@@ -11,7 +11,11 @@ public class FieldDeclaration : Statement
 
     public void Execute()
     {
-        Value value = initializer?.Eval() ?? new NumberValue(0);
-        Variables.CurrentContext[name] = value;
+        var thisObj = Variables.Get("this") as ObjectValue;
+        if (thisObj == null) 
+            throw new Exception("'this' is not defined");
+        
+        Value value = (initializer != null) ? initializer.Eval() : new NumberValue(0);
+        thisObj.SetField(name, value);
     }
 }
