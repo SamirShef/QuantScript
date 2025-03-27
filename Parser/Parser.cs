@@ -93,7 +93,7 @@ public class Parser
         {
             return ForStatement();
         }
-        if (Match(TokenType.VOID))
+        if (Match(TokenType.FUNC))
         {
             return FunctionDefine();
         }
@@ -129,7 +129,7 @@ public class Parser
             else throw new Exception("The value of the field has not been declared");
             return new FieldDeclaration(name, initializer);
         }
-        else if (Match(TokenType.VOID))
+        else if (Match(TokenType.FUNC))
         {
             return MethodDeclaration(isVoid: true);
         }
@@ -439,7 +439,19 @@ public class Parser
         while (Match(TokenType.DOT))
         {
             string memberName = Consume(TokenType.Word).GetValue();
-            expr = new MemberAccessExpression(expr, memberName);
+            List<Expression> args = new List<Expression>();
+            
+            // Проверяем наличие аргументов вызова метода
+            if (Match(TokenType.LParen))
+            {
+                while (!Match(TokenType.RParen))
+                {
+                    args.Add(Expression());
+                    Match(TokenType.COMMA);
+                }
+            }
+            
+            expr = new MemberAccessExpression(expr, memberName, args);
         }
         
         return expr;

@@ -156,8 +156,8 @@ public class Lexer
             case "continue":
                 AddToken(TokenType.CONTINUE);
                 break;
-            case "void":
-                AddToken(TokenType.VOID);
+            case "func":
+                AddToken(TokenType.FUNC);
                 break;
             case "return":
                 AddToken(TokenType.RETURN);

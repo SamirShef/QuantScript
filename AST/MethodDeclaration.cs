@@ -15,7 +15,10 @@ public class MethodDeclaration : Statement
 
     public void Execute()
     {
+        var thisObj = Variables.Get("this") as ObjectValue;
+        if (thisObj == null) throw new Exception("'this' is not defined in method context");
+        
         var function = new UserDefinedMethod(Parameters, Body, IsVoid);
-        Functions.Set(Name, function);
+        thisObj.SetMethod(Name, function);
     }
 }

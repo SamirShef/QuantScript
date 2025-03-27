@@ -11,7 +11,6 @@ public class ClassDeclaration : Statement
 
     public void Execute()
     {
-        // Создаем временный объект для инициализации методов
         var tempObj = new ObjectValue();
         Variables.Push();
         Variables.Set("this", tempObj);
@@ -21,7 +20,7 @@ public class ClassDeclaration : Statement
         // Переносим методы в класс
         foreach (var method in tempObj.Methods)
         {
-            Functions.Set($"{Name}.{method.Key}", method.Value);
+            tempObj.SetMethod(method.Key, method.Value);
         }
         
         Classes.Set(Name, this);

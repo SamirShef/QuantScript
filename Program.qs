@@ -1,12 +1,12 @@
 class Calculator {
     var memory = 5
 
-    void Sum(a, b)
+    func Sum(a, b)
     {
         return a + b
     }
 
-    void Print(a)
+    func Print(a)
     {
         echo(a)
     }

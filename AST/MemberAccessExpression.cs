@@ -2,11 +2,13 @@ public class MemberAccessExpression : Expression
 {
     private readonly Expression _target;
     private readonly string _memberName;
+    private readonly List<Expression> _arguments;
 
-    public MemberAccessExpression(Expression target, string memberName)
+    public MemberAccessExpression(Expression target, string memberName, List<Expression> arguments = null)
     {
         _target = target;
         _memberName = memberName;
+        _arguments = arguments ?? new List<Expression>();
     }
 
     public Value Eval()
@@ -20,19 +22,21 @@ public class MemberAccessExpression : Expression
                 return field;
 
             // Вызов метода
-            if (Functions.IsExists(_memberName))
+            var method = obj.GetMethod(_memberName);
+            if (method != null)
             {
-                Function func = Functions.Get(_memberName);
-                if (func is UserDefinedMethod method)
+                // Вычисляем аргументы
+                Value[] args = new Value[_arguments.Count];
+                for (int i = 0; i < _arguments.Count; i++)
                 {
-                    // Передаем объект как контекст
-                    Variables.Push();
-                    Variables.Set("this", obj);
-                    Value result = method.Execute();
-                    Variables.Pop();
-                    return result;
+                    args[i] = _arguments[i].Eval();
                 }
-                return func.Execute();
+
+                Variables.Push();
+                Variables.Set("this", obj);
+                Value result = method.Execute(args);
+                Variables.Pop();
+                return result;
             }
 
             throw new Exception($"Member '{_memberName}' not found");

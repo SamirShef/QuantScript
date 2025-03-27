@@ -21,7 +21,7 @@ public enum TokenType
     DO,
     BREAK,
     CONTINUE,
-    VOID,
+    FUNC,
     RETURN,
 
     Plus,
