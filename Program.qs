@@ -1,20 +1,24 @@
-class Calculator {
-    var memory = 5
+class AWD
+{
+    var awd = 4
 
-    func Sum(a, b)
+    func Multiply(a, b)
     {
-        return a + b
+        return a * b
     }
 
-    func Print(a)
+    func Print(a, b)
     {
-        echo(a)
+        echo(a, b)
+        echo("ADWAD")
     }
 }
 
+class Calculator {
+    var awd = new AWD()
+}
+
 var calc = new Calculator()
-echo(calc.memory) // 5
-calc.memory = 1 // переприсвоит переменную класса
-echo(calc.memory) // 1
-echo(calc.Sum(1, 2)) // 3
-calc.Print(2) // 2
+echo(calc.awd.awd)
+echo(calc.awd.Multiply(2, 3))
+echo(calc.awd.Print(2, 3))

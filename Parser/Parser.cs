@@ -176,13 +176,39 @@ public class Parser
         if (Get(0).GetType() == TokenType.Word && Get(1).GetType() == TokenType.DOT)
         {
             Expression target = new VariablesExpression(Consume(TokenType.Word).GetValue());
-            while (Match(TokenType.DOT))
+            
+            // Собираем цепочку до первого присваивания или вызова
+            while (true)
             {
+                if (!Match(TokenType.DOT)) break;
+                
                 string member = Consume(TokenType.Word).GetValue();
-                target = new MemberAccessExpression(target, member);
+                List<Expression> args = new List<Expression>();
+                
+                // Проверяем наличие аргументов метода
+                if (Match(TokenType.LParen))
+                {
+                    while (!Match(TokenType.RParen))
+                    {
+                        args.Add(Expression());
+                        Match(TokenType.COMMA);
+                    }
+                }
+                
+                target = new MemberAccessExpression(target, member, args);
+                
+                // Если после метода идет присваивание - выходим
+                if (Get(0).GetType() == TokenType.EQ) break;
             }
-            Consume(TokenType.EQ);
-            return new MemberAssignmentStatement((MemberAccessExpression)target, Expression());
+
+            // Если есть присваивание - обрабатываем как MemberAssignment
+            if (Match(TokenType.EQ))
+            {
+                return new MemberAssignmentStatement((MemberAccessExpression)target, Expression());
+            }
+            
+            // Если нет - возвращаем как выражение
+            return new ExpressionStatement(target);
         }
         if (Get(0).GetType() == TokenType.Word && Get(1).GetType() == TokenType.LBracket)
         {
