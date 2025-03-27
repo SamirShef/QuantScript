@@ -173,6 +173,17 @@ public class Parser
                 return new AssignmentStatement(variable, Expression());
             }
         }
+        if (Get(0).GetType() == TokenType.Word && Get(1).GetType() == TokenType.DOT)
+        {
+            Expression target = new VariablesExpression(Consume(TokenType.Word).GetValue());
+            while (Match(TokenType.DOT))
+            {
+                string member = Consume(TokenType.Word).GetValue();
+                target = new MemberAccessExpression(target, member);
+            }
+            Consume(TokenType.EQ);
+            return new MemberAssignmentStatement((MemberAccessExpression)target, Expression());
+        }
         if (Get(0).GetType() == TokenType.Word && Get(1).GetType() == TokenType.LBracket)
         {
             string variable = Consume(TokenType.Word).GetValue();

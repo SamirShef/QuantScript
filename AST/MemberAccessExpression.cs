@@ -21,11 +21,34 @@ public class MemberAccessExpression : Expression
 
             // Вызов метода
             if (Functions.IsExists(_memberName))
-                return Functions.Get(_memberName).Execute();
+            {
+                Function func = Functions.Get(_memberName);
+                if (func is UserDefinedMethod method)
+                {
+                    // Передаем объект как контекст
+                    Variables.Push();
+                    Variables.Set("this", obj);
+                    Value result = method.Execute();
+                    Variables.Pop();
+                    return result;
+                }
+                return func.Execute();
+            }
 
             throw new Exception($"Member '{_memberName}' not found");
         }
 
+        throw new Exception("Member access on non-object value");
+    }
+
+    public void SetValue(Value value)
+    {
+        var targetValue = _target.Eval();
+        if (targetValue is ObjectValue obj)
+        {
+            obj.SetField(_memberName, value);
+            return;
+        }
         throw new Exception("Member access on non-object value");
     }
 }

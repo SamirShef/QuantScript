@@ -16,6 +16,9 @@ public class UserDefinedMethod : Function
         Variables.Push();
         try
         {
+            // Устанавливаем контекст
+            var thisObj = Variables.Get("this") as ObjectValue;
+            
             for (int i = 0; i < parameters.Count; i++)
             {
                 Variables.Set(parameters[i], i < args.Length ? args[i] : new NumberValue(0));
