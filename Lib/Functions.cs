@@ -57,8 +57,17 @@ public class Functions
         public Value Execute(params Value[] args)
         {
             StringBuilder buffer = new StringBuilder();
-            foreach (Value arg in args) buffer.Append($"{arg.AsString()} ");
-            Console.WriteLine(buffer.Length > 0 ? buffer.Remove(buffer.Length - 1, 1).ToString() : "");
+            foreach (Value arg in args)
+            {
+                if (arg is VoidValue) continue;
+                buffer.Append($"{arg.AsString()} ");
+            }
+            
+            string result = buffer.ToString().Trim();
+            if (!string.IsNullOrEmpty(result))
+            {
+                Console.WriteLine(result);
+            }
             return new NumberValue(0);
         }
     }

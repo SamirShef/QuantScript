@@ -28,7 +28,7 @@ public class UserDefinedMethod : Function
             body.Execute();
 
             // Для void-методов возвращаем 0, для функций - ожидаем return
-            if (isVoid) return new NumberValue(0);
+            if (isVoid) return new VoidValue();
             
             // Если функция не void, но return не вызван - ошибка
             throw new Exception("Function must return a value");
