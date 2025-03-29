@@ -16,24 +16,36 @@ public class NativeFunction : Function
 
     public Value Execute(params Value[] args)
     {
-        var parameters = _method.GetParameters();
-        object?[] finalArgs = new object?[parameters.Length];
-
-        // Заполняем переданные аргументы
-        for (int i = 0; i < args.Length; i++)
+        try
         {
-            finalArgs[i] = ConvertArgument(args[i]);
-        }
+            var parameters = _method.GetParameters();
+            object?[] finalArgs = new object?[parameters.Length];
 
-        // Добавляем значения по умолчанию для не указанных аргументов
-        for (int i = args.Length; i < parameters.Length; i++)
+            // Заполняем переданные аргументы
+            for (int i = 0; i < args.Length; i++)
+            {
+                finalArgs[i] = ConvertArgument(args[i]);
+            }
+
+            // Добавляем значения по умолчанию для не указанных аргументов
+            for (int i = args.Length; i < parameters.Length; i++)
+            {
+                finalArgs[i] = _defaultArgs[i];
+            }
+
+            // Вызов метода
+            var result = _method.Invoke(null, finalArgs);
+            return ConvertResult(result);
+        }
+        catch (TargetInvocationException ex) // Перехватываем исключения из C#
         {
-            finalArgs[i] = _defaultArgs[i];
+            // Извлекаем оригинальное исключение и его сообщение
+            throw new Exception($"{ex.InnerException?.Message}");
         }
-
-        // Вызов метода
-        var result = _method.Invoke(null, finalArgs);
-        return ConvertResult(result);
+        catch (Exception ex)
+        {
+            throw new Exception($"Ошибка вызова метода: {ex.Message}");
+        }
     }
 
     private object ConvertArgument(Value arg)
