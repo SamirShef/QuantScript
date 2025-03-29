@@ -2,7 +2,7 @@ using System.Text;
 
 public class Lexer
 {
-    private static string OPERATOR_CHARS = "+-*/(){}[]=<>!&|,;.";
+    private static string OPERATOR_CHARS = "+-*/%(){}[]=<>!&|,;.";
     private static Dictionary<string, TokenType> OPERATORS = InitOperators();
     private static Dictionary<string, TokenType> InitOperators()
     {
@@ -11,6 +11,15 @@ public class Lexer
         OPERATORS.Add("-", TokenType.Minus);
         OPERATORS.Add("*", TokenType.Multiple);
         OPERATORS.Add("/", TokenType.Division);
+        OPERATORS.Add("%", TokenType.Modulo);
+        OPERATORS.Add("+=", TokenType.PlusEQ);
+        OPERATORS.Add("-=", TokenType.MinusEQ);
+        OPERATORS.Add("*=", TokenType.MultipleEQ);
+        OPERATORS.Add("/=", TokenType.DivisionEQ);
+        OPERATORS.Add("%=", TokenType.ModuloEQ);
+        OPERATORS.Add("++", TokenType.Increment);
+        OPERATORS.Add("--", TokenType.Decrement);
+
         OPERATORS.Add("(", TokenType.LParen);
         OPERATORS.Add(")", TokenType.RParen);
         OPERATORS.Add("{", TokenType.LBrace);

@@ -158,11 +158,46 @@ public class Parser
 
     private Statement AssignmentStatement()
     {
-        if (Get(0).GetType() == TokenType.Word && Get(1).GetType() == TokenType.EQ)
+        if (Get(0).GetType() == TokenType.Word)
         {
             string variable = Consume(TokenType.Word).GetValue();
-            Consume(TokenType.EQ);
-            return new AssignmentStatement(variable, Expression());
+            
+            if (Match(TokenType.Increment))
+            {
+                return new IncrementDecrementStatement(variable, true);
+            }
+            if (Match(TokenType.Decrement))
+            {
+                return new IncrementDecrementStatement(variable, false);
+            }
+
+            if (Match(TokenType.PlusEQ))
+            {
+                return new CompoundAssignmentStatement(variable, '+', Expression());
+            }
+            if (Match(TokenType.MinusEQ))
+            {
+                return new CompoundAssignmentStatement(variable, '-', Expression());
+            }
+            if (Match(TokenType.MultipleEQ))
+            {
+                return new CompoundAssignmentStatement(variable, '*', Expression());
+            }
+            if (Match(TokenType.DivisionEQ))
+            {
+                return new CompoundAssignmentStatement(variable, '/', Expression());
+            }
+            if (Match(TokenType.ModuloEQ))
+            {
+                return new CompoundAssignmentStatement(variable, '%', Expression());
+            }
+            if (Get(1).GetType() == TokenType.EQ)
+            {
+                Consume(TokenType.EQ);
+                return new AssignmentStatement(variable, Expression());
+            }
+
+            pos--;
         }
         if (Match(TokenType.VAR))
         {
