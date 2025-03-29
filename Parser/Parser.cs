@@ -191,9 +191,8 @@ public class Parser
             {
                 return new CompoundAssignmentStatement(variable, '%', Expression());
             }
-            if (Get(1).GetType() == TokenType.EQ)
+            if (Match(TokenType.EQ))
             {
-                Consume(TokenType.EQ);
                 return new AssignmentStatement(variable, Expression());
             }
 
@@ -358,7 +357,22 @@ public class Parser
 
     private Expression Expression()
     {
-        return LogicalOR();
+        return Ternary();
+    }
+
+    private Expression Ternary()
+    {
+        Expression condition = LogicalOR(); // Берем условие из текущего уровня
+        
+        if (Match(TokenType.QUESTION))
+        {
+            Expression trueExpr = Expression(); // Рекурсивный вызов для вложенных тернаров
+            Consume(TokenType.COLON);
+            Expression falseExpr = Expression();
+            return new TernaryExpression(condition, trueExpr, falseExpr);
+        }
+        
+        return condition;
     }
 
     private Expression LogicalOR()

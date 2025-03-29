@@ -2,7 +2,7 @@ using System.Text;
 
 public class Lexer
 {
-    private static string OPERATOR_CHARS = "+-*/%(){}[]=<>!&|,;.";
+    private static string OPERATOR_CHARS = "+-*/%(){}[]=<>!&|,;.?:";
     private static Dictionary<string, TokenType> OPERATORS = InitOperators();
     private static Dictionary<string, TokenType> InitOperators()
     {
@@ -44,6 +44,9 @@ public class Lexer
         OPERATORS.Add(",", TokenType.COMMA);
         OPERATORS.Add(";", TokenType.SEMIPOINT);
         OPERATORS.Add(".", TokenType.DOT);
+        
+        OPERATORS.Add("?", TokenType.QUESTION);
+        OPERATORS.Add(":", TokenType.COLON);
 
         return OPERATORS;
     }

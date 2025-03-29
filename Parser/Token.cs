@@ -54,6 +54,8 @@ public enum TokenType
     AMPAMP,
     COMMA, // ,
     SEMIPOINT, // ;
+    QUESTION,   // ?
+    COLON,
 
     Unknown,
     EOF
