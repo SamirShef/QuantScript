@@ -14,10 +14,17 @@ public class LibraryLoader
             
             foreach (var type in assembly.GetTypes())
             {
+                // Создаем объект для статического класса
+                var staticClassObj = new ObjectValue();
+                
                 foreach (var method in type.GetMethods(BindingFlags.Public | BindingFlags.Static))
                 {
-                    Functions.Set(method.Name, new NativeFunction(method));
+                    // Добавляем метод в объект класса
+                    staticClassObj.SetMethod(method.Name, new NativeFunction(method));
                 }
+                
+                // Регистрируем класс в переменных
+                Variables.Set(type.Name, staticClassObj);
             }
         }
         catch (FileNotFoundException)
