@@ -22,6 +22,12 @@ public class LibraryLoader
                     // Добавляем метод в объект класса
                     staticClassObj.SetMethod(method.Name, new NativeFunction(method));
                 }
+
+                foreach (var field in type.GetFields(BindingFlags.Public | BindingFlags.Static))
+                {
+                    object value = field.GetValue(null); // Получаем значение поля
+                    staticClassObj.SetField(field.Name, ConvertToValue(value));
+                }
                 
                 // Регистрируем класс в переменных
                 Variables.Set(type.Name, staticClassObj);
@@ -35,5 +41,16 @@ public class LibraryLoader
         {
             throw new Exception($"Ошибка загрузки библиотеки '{libraryName}': {ex.Message}");
         }
+    }
+
+    private Value ConvertToValue(object obj)
+    {
+        return obj switch
+        {
+            double d => new NumberValue(d),
+            int i => new NumberValue(i),
+            string s => new StringValue(s),
+            _ => throw new Exception($"Unsupported field type: {obj?.GetType()}")
+        };
     }
 }

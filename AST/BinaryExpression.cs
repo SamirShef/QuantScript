@@ -46,6 +46,7 @@ public class BinaryExpression : Expression
             case '-': return new NumberValue(num1 - num2);
             case '*': return new NumberValue(num1 * num2);
             case '/': return new NumberValue(num1 / num2);
+            case '%': return new NumberValue(num1 % num2);
             default: return new NumberValue(0);
         }
     }

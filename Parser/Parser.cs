@@ -495,6 +495,11 @@ public class Parser
                 result = new BinaryExpression('/', result, Unary());
                 continue;
             }
+            if (Match(TokenType.Modulo))
+            {
+                result = new BinaryExpression('%', result, Unary());
+                continue;
+            }
             break;
         }
 
